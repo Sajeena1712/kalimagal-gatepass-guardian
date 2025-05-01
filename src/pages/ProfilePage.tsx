@@ -1,4 +1,3 @@
-
 import React from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import {
@@ -42,13 +41,14 @@ const ProfilePage = () => {
     emergencyContact: "+91 9876543212",
   };
 
-  const isEditable = userRole === "admin" || userRole === "tutor" || userRole === "warden" || userRole === "hod";
+  // Updated: Only warden can edit profiles
+  const isEditable = userRole === "warden";
 
   const handleUpdate = () => {
     if (!isEditable) {
       toast({
         title: "Access Denied",
-        description: "You don't have permission to update profile. Please contact your tutor or admin.",
+        description: "You don't have permission to update profile. Please contact the warden.",
         variant: "destructive",
       });
       return;
@@ -68,7 +68,7 @@ const ProfilePage = () => {
           {!isEditable && (
             <div className="bg-amber-100 text-amber-800 px-4 py-2 rounded-md flex items-center space-x-2">
               <Shield size={16} />
-              <span className="text-sm">Profile can only be edited by tutors and admins</span>
+              <span className="text-sm">Profile can only be edited by the warden</span>
             </div>
           )}
           {isEditable && (
@@ -79,11 +79,11 @@ const ProfilePage = () => {
           )}
         </div>
 
-        {userRole === "student" && (
+        {userRole !== "warden" && (
           <Alert variant="default" className="bg-blue-50 border-blue-200">
             <AlertCircle className="h-4 w-4 text-blue-600" />
             <AlertDescription className="text-blue-700">
-              As a student, you cannot modify your profile information. Please contact your tutor or admin for any changes.
+              Only the warden can modify profile information. Please contact the warden for any changes.
             </AlertDescription>
           </Alert>
         )}
