@@ -14,11 +14,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { useToast } from "@/components/ui/use-toast";
+import { Shield, UserCog } from "lucide-react";
 
 const ProfilePage = () => {
   // In a real app, this would come from your authentication context
   const userRole = localStorage.getItem('userRole') || "student";
   const userName = localStorage.getItem('userName') || "John Student";
+  const { toast } = useToast();
 
   // Mock student data
   const student = {
@@ -38,10 +41,34 @@ const ProfilePage = () => {
     emergencyContact: "+91 9876543212",
   };
 
+  const isEditable = userRole === "admin" || userRole === "tutor" || userRole === "warden" || userRole === "hod";
+
+  const handleUpdate = () => {
+    toast({
+      title: "Profile Update Failed",
+      description: isEditable ? "Profile updated successfully" : "You don't have permission to update profile. Please contact your tutor or admin.",
+      variant: isEditable ? "default" : "destructive",
+    });
+  };
+
   return (
     <DashboardLayout userName={userName} userRole={userRole}>
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold tracking-tight">My Profile</h1>
+        <div className="flex items-center justify-between">
+          <h1 className="text-3xl font-bold tracking-tight">My Profile</h1>
+          {!isEditable && (
+            <div className="bg-amber-100 text-amber-800 px-4 py-2 rounded-md flex items-center space-x-2">
+              <Shield size={16} />
+              <span className="text-sm">Profile can only be edited by tutors and admins</span>
+            </div>
+          )}
+          {isEditable && (
+            <div className="bg-green-100 text-green-800 px-4 py-2 rounded-md flex items-center space-x-2">
+              <UserCog size={16} />
+              <span className="text-sm">You have permission to edit profiles</span>
+            </div>
+          )}
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card className="md:col-span-1">
@@ -121,11 +148,21 @@ const ProfilePage = () => {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="email">Email</Label>
-                      <Input id="email" defaultValue={student.email} />
+                      <Input 
+                        id="email" 
+                        defaultValue={student.email} 
+                        readOnly={!isEditable}
+                        className={!isEditable ? "bg-gray-50" : ""}
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="phone">Phone</Label>
-                      <Input id="phone" defaultValue={student.phone} />
+                      <Input 
+                        id="phone" 
+                        defaultValue={student.phone} 
+                        readOnly={!isEditable}
+                        className={!isEditable ? "bg-gray-50" : ""}
+                      />
                     </div>
                   </div>
 
@@ -133,26 +170,49 @@ const ProfilePage = () => {
 
                   <div className="space-y-2">
                     <Label htmlFor="address">Address</Label>
-                    <Input id="address" defaultValue={student.address} />
+                    <Input 
+                      id="address" 
+                      defaultValue={student.address} 
+                      readOnly={!isEditable}
+                      className={!isEditable ? "bg-gray-50" : ""}
+                    />
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="blood">Blood Group</Label>
-                      <Input id="blood" defaultValue={student.bloodGroup} />
+                      <Input 
+                        id="blood" 
+                        defaultValue={student.bloodGroup}
+                        readOnly={!isEditable}
+                        className={!isEditable ? "bg-gray-50" : ""}
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="emergency">Emergency Contact</Label>
-                      <Input id="emergency" defaultValue={student.emergencyContact} />
+                      <Input 
+                        id="emergency" 
+                        defaultValue={student.emergencyContact}
+                        readOnly={!isEditable}
+                        className={!isEditable ? "bg-gray-50" : ""}
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="dob">Date of Birth</Label>
-                      <Input id="dob" defaultValue={student.dateOfBirth} />
+                      <Input 
+                        id="dob" 
+                        defaultValue={student.dateOfBirth}
+                        readOnly={!isEditable}
+                        className={!isEditable ? "bg-gray-50" : ""}
+                      />
                     </div>
                   </div>
 
                   <div className="flex justify-end">
-                    <Button className="bg-hostel-primary hover:bg-hostel-primary/90">
+                    <Button 
+                      className={isEditable ? "bg-hostel-primary hover:bg-hostel-primary/90" : "bg-gray-400 cursor-not-allowed"}
+                      onClick={handleUpdate}
+                    >
                       Update Profile
                     </Button>
                   </div>
@@ -162,20 +222,38 @@ const ProfilePage = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="parentName">Parent's Name</Label>
-                      <Input id="parentName" defaultValue={student.parentName} />
+                      <Input 
+                        id="parentName" 
+                        defaultValue={student.parentName}
+                        readOnly={!isEditable}
+                        className={!isEditable ? "bg-gray-50" : ""}
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="parentPhone">Parent's Phone</Label>
-                      <Input id="parentPhone" defaultValue={student.parentPhone} />
+                      <Input 
+                        id="parentPhone" 
+                        defaultValue={student.parentPhone}
+                        readOnly={!isEditable}
+                        className={!isEditable ? "bg-gray-50" : ""}
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="parentEmail">Parent's Email</Label>
-                      <Input id="parentEmail" defaultValue={student.parentEmail} />
+                      <Input 
+                        id="parentEmail" 
+                        defaultValue={student.parentEmail}
+                        readOnly={!isEditable}
+                        className={!isEditable ? "bg-gray-50" : ""}
+                      />
                     </div>
                   </div>
                   
                   <div className="flex justify-end">
-                    <Button className="bg-hostel-primary hover:bg-hostel-primary/90">
+                    <Button 
+                      className={isEditable ? "bg-hostel-primary hover:bg-hostel-primary/90" : "bg-gray-400 cursor-not-allowed"}
+                      onClick={handleUpdate}
+                    >
                       Update Parent Info
                     </Button>
                   </div>
@@ -198,7 +276,13 @@ const ProfilePage = () => {
                   </div>
 
                   <div className="flex justify-end">
-                    <Button className="bg-hostel-primary hover:bg-hostel-primary/90">
+                    <Button 
+                      className="bg-hostel-primary hover:bg-hostel-primary/90"
+                      onClick={() => toast({
+                        title: "Password Updated",
+                        description: "Your password has been successfully updated."
+                      })}
+                    >
                       Change Password
                     </Button>
                   </div>

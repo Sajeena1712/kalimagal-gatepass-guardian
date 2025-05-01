@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 // Pages
 import Index from "./pages/Index";
 import Login from "./pages/Login";
+import About from "./pages/About";
 import Dashboard from "./pages/Dashboard";
 import GatepassApplication from "./pages/GatepassApplication";
 import GatepassHistory from "./pages/GatepassHistory";
@@ -58,6 +59,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/about" element={<About />} />
             
             {/* Protected Routes */}
             <Route path="/dashboard" element={
