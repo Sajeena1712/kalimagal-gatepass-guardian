@@ -15,7 +15,8 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
-import { Shield, UserCog } from "lucide-react";
+import { Shield, UserCog, AlertCircle } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const ProfilePage = () => {
   // In a real app, this would come from your authentication context
@@ -44,10 +45,18 @@ const ProfilePage = () => {
   const isEditable = userRole === "admin" || userRole === "tutor" || userRole === "warden" || userRole === "hod";
 
   const handleUpdate = () => {
+    if (!isEditable) {
+      toast({
+        title: "Access Denied",
+        description: "You don't have permission to update profile. Please contact your tutor or admin.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     toast({
-      title: "Profile Update Failed",
-      description: isEditable ? "Profile updated successfully" : "You don't have permission to update profile. Please contact your tutor or admin.",
-      variant: isEditable ? "default" : "destructive",
+      title: "Profile Updated",
+      description: "Profile details have been updated successfully.",
     });
   };
 
@@ -69,6 +78,15 @@ const ProfilePage = () => {
             </div>
           )}
         </div>
+
+        {userRole === "student" && (
+          <Alert variant="default" className="bg-blue-50 border-blue-200">
+            <AlertCircle className="h-4 w-4 text-blue-600" />
+            <AlertDescription className="text-blue-700">
+              As a student, you cannot modify your profile information. Please contact your tutor or admin for any changes.
+            </AlertDescription>
+          </Alert>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card className="md:col-span-1">
@@ -152,6 +170,7 @@ const ProfilePage = () => {
                         id="email" 
                         defaultValue={student.email} 
                         readOnly={!isEditable}
+                        disabled={!isEditable}
                         className={!isEditable ? "bg-gray-50" : ""}
                       />
                     </div>
@@ -161,6 +180,7 @@ const ProfilePage = () => {
                         id="phone" 
                         defaultValue={student.phone} 
                         readOnly={!isEditable}
+                        disabled={!isEditable}
                         className={!isEditable ? "bg-gray-50" : ""}
                       />
                     </div>
@@ -174,6 +194,7 @@ const ProfilePage = () => {
                       id="address" 
                       defaultValue={student.address} 
                       readOnly={!isEditable}
+                      disabled={!isEditable}
                       className={!isEditable ? "bg-gray-50" : ""}
                     />
                   </div>
@@ -185,6 +206,7 @@ const ProfilePage = () => {
                         id="blood" 
                         defaultValue={student.bloodGroup}
                         readOnly={!isEditable}
+                        disabled={!isEditable}
                         className={!isEditable ? "bg-gray-50" : ""}
                       />
                     </div>
@@ -194,6 +216,7 @@ const ProfilePage = () => {
                         id="emergency" 
                         defaultValue={student.emergencyContact}
                         readOnly={!isEditable}
+                        disabled={!isEditable}
                         className={!isEditable ? "bg-gray-50" : ""}
                       />
                     </div>
@@ -203,6 +226,7 @@ const ProfilePage = () => {
                         id="dob" 
                         defaultValue={student.dateOfBirth}
                         readOnly={!isEditable}
+                        disabled={!isEditable}
                         className={!isEditable ? "bg-gray-50" : ""}
                       />
                     </div>
@@ -210,8 +234,9 @@ const ProfilePage = () => {
 
                   <div className="flex justify-end">
                     <Button 
-                      className={isEditable ? "bg-hostel-primary hover:bg-hostel-primary/90" : "bg-gray-400 cursor-not-allowed"}
+                      className={isEditable ? "bg-hostel-primary hover:bg-hostel-primary/90" : "bg-gray-400"}
                       onClick={handleUpdate}
+                      disabled={!isEditable}
                     >
                       Update Profile
                     </Button>
@@ -226,6 +251,7 @@ const ProfilePage = () => {
                         id="parentName" 
                         defaultValue={student.parentName}
                         readOnly={!isEditable}
+                        disabled={!isEditable}
                         className={!isEditable ? "bg-gray-50" : ""}
                       />
                     </div>
@@ -235,6 +261,7 @@ const ProfilePage = () => {
                         id="parentPhone" 
                         defaultValue={student.parentPhone}
                         readOnly={!isEditable}
+                        disabled={!isEditable}
                         className={!isEditable ? "bg-gray-50" : ""}
                       />
                     </div>
@@ -244,6 +271,7 @@ const ProfilePage = () => {
                         id="parentEmail" 
                         defaultValue={student.parentEmail}
                         readOnly={!isEditable}
+                        disabled={!isEditable}
                         className={!isEditable ? "bg-gray-50" : ""}
                       />
                     </div>
@@ -251,8 +279,9 @@ const ProfilePage = () => {
                   
                   <div className="flex justify-end">
                     <Button 
-                      className={isEditable ? "bg-hostel-primary hover:bg-hostel-primary/90" : "bg-gray-400 cursor-not-allowed"}
+                      className={isEditable ? "bg-hostel-primary hover:bg-hostel-primary/90" : "bg-gray-400"}
                       onClick={handleUpdate}
+                      disabled={!isEditable}
                     >
                       Update Parent Info
                     </Button>
