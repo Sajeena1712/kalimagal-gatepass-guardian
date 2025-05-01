@@ -27,7 +27,13 @@ const GatepassApplication = () => {
       userRole={userRole}
       notifications={notifications}
     >
-      <div className="space-y-6">
+      <div className="space-y-6 relative">
+        {/* Background decoration */}
+        <div className="absolute -z-10 inset-0 overflow-hidden">
+          <div className="absolute top-0 right-0 w-80 h-80 bg-hostel-light rounded-full mix-blend-multiply filter blur-3xl opacity-30"></div>
+          <div className="absolute -bottom-20 -left-10 w-80 h-80 bg-hostel-secondary rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+        </div>
+        
         <h1 className="text-3xl font-bold tracking-tight">Apply for Gatepass</h1>
         
         <div className="grid gap-6">
@@ -40,7 +46,7 @@ const GatepassApplication = () => {
             </AlertDescription>
           </Alert>
           
-          <Card>
+          <Card className="backdrop-blur-sm bg-white/80">
             <CardHeader>
               <CardTitle>Gatepass Request Form</CardTitle>
               <CardDescription>
